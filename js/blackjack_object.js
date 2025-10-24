@@ -1,13 +1,19 @@
 // Blackjack object
+class Card {
+    constructor(valor, naipe) {
+        this.valor = valor;
+        this.naipe = naipe;
+    }
+}
 
 /**
  * Class that represents the Blackjack game.
  */
 class Blackjack {
     // Constant that defines the maximum points to avoid busting in Blackjack
-    static MAX_POINTS = 25;
+    static MAX_POINTS = 21;
     // Constant that defines the point threshold at which the dealer must stand
-    static DEALER_MAX_TURN_POINTS = 21;
+    static DEALER_MAX_TURN_POINTS = 17;
 
     /**
      * Creates an instance of Blackjack and initializes the deck.
@@ -42,7 +48,10 @@ class Blackjack {
         const deck = [];
 
         for (let naipe of naipes) {
-            for (let valores = 1; valores <= 13; valores++) {
+            for (let valor = 1; valor <= 13; valor++) {
+                if (valor === 11) valor = 'Valete';
+                else if (valor === 12) valor = 'Dama';
+                else if (valor === 13) valor = 'Rei';
                 deck.push(new Card(valor, naipe));
             } 
         }
@@ -59,7 +68,7 @@ class Blackjack {
         const cardsDeck = [];
         const shuffleDeck = [];
         
-        for(let i = 0; i <= 52; i++) {
+        for(let i = 0; i < 52; i++) {
             cardsDeck.push(i);
         }
 
@@ -173,10 +182,10 @@ class Blackjack {
             this.state.playerWon = true;
         }
 
-        if(this.dealerTurn && dealerValue >= Blackjack.DEALER_MAX_TURN_POINTS) {
-            if (dealerValue > playerValue && !this.state.dealerBusted) {
+        if(this.dealerTurn && dealerValue >= Blackjack.DEALER_MAX_TURN_POINTS && !this.state.gameEnded) {
+            if (dealerValue > playerValue) {
                 this.state.dealerWon = true;
-            } else if (playerValue > dealerValue && !this.state.playerBusted) {
+            } else if (playerValue > dealerValue) {
                 this.state.playerWon = true;
             }
             this.state.gameEnded = true;

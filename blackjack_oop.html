@@ -8,6 +8,8 @@
   <!-- Responsive design settings to ensure proper rendering on mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>BlackJack25</title>
+
   <!-- Compatibility settings for Internet Explorer -->
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
@@ -28,45 +30,73 @@
 <body>
   <!-- Header section containing the game title -->
   <header class="container">
-    <h1>Blackjack 25</h1> <!-- Main heading for the game -->
+    <h1 class="text-center">♠️ Blackjack 25 ♥️</h1> <!-- Main heading for the game -->
   </header>
 
   <main class="container">
     <!-- Main game section -->
-    <section id="game">
-      <h2>Dealer</h2> <!-- Subheading for the dealer's section -->
-      <p id="dealer"></p> <!-- Placeholder for displaying dealer's cards -->
+    <section id="game" class="my-4">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h2 class="card-title">🎩 Dealer <!-- Subheading for the dealer's section -->
+            <span class="badge bg-danger" id="dealer-score">0</span>
+          </h2>
+          <p id="dealer" class="lead">Loading...</p> <!-- Placeholder for displaying dealer's cards -->
+        </div>
+      </div>
 
-      <h2>Player</h2> <!-- Subheading for the player's section -->
-      <p id="player"></p> <!-- Placeholder for displaying player's cards -->
+      <div class = "card mb-3">
+        <div class="card-body">
+          <h2 class="card-title">🎮 Player <!-- Subheading for the player's section -->
+            <span class="badge bg-primary" id="player-score">0</span>
+          </h2>
+          <p id="player" class="lead">Loading...</p> <!-- Placeholder for displaying player's cards -->
+        </div>
+      </div>
 
       <!-- Button for the player to draw a new card -->
-      <button class="btn btn-primary" id="card" type="button" onclick="playerNewCard()">Card</button>
-
-      <!-- Button for the player to stand (end their turn) -->
-      <button class="btn btn-secondary" id="stand" type="button" onclick="dealerFinish()">Stand</button>
-
-      <!-- Button to start a new game, initially disabled -->
-      <button class="btn btn-success" id="new_game" type="button" onclick="newGame()" disabled>New Game</button>
+      <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+        <button class="btn btn-primary btn-lg" id ="card" onclick="playerNewCard()">
+          <i class="bi bi-plus-circle"></i> Card
+        </button>
+        <button class="btn btn-secondary btn-lg" id="stand" onclick="dealerFinish()">
+          <i class="bi bi-hand-thumbs-up"></i> Stand
+        </button>
+        <button class="btn btn-success btn-lg" id="new_game" onclick="newGame()">
+          <i class="bi bi-arrow-clockwise"></i> New Game
+        </button>
+      </div>
     </section>
 
+      
     <!-- Section to display the game's status and messages -->
-    <section id="game_status">
+    <section id="game_status" class="alert alert-info text-center my-3" role="alert">
       <!-- This will be populated dynamically during the game -->
     </section>
 
     <!-- Debugging section for developers to view game state -->
     <section id="sec_debug">
-      <h2>Debug</h2> <!-- Subheading for the debug section -->
-      <p id="debug">
-        <!-- Placeholder for displaying debug information -->
-      </p>
+      <div class="accordion" id="debugAccordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#debugCollapse">
+              🔍 Debug
+            </button>
+          </h2>
+          <div id="debugCollapse" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <pre id="debug"></pre> <!-- Preformatted text area for displaying debug information -->
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
   <!-- Footer section, currently empty -->
-  <footer class="container">
+  <footer class="container text-center text-white py-3">
     <!-- Any footer content can be added here -->
+     <small>Have fun playing Blackjack! 🎲</small>
   </footer>
 
   <!-- Link to Bootstrap's JavaScript bundle for interactive components -->

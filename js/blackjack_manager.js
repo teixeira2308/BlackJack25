@@ -25,11 +25,12 @@ function buttonsInitialization() {
 function finalizeButtons() {
     //TODO: Reveal the dealer's hidden card if you hid it like you were supposed to.
 
-    const dealerCards = game.getDealerCards();
+    /* const dealerCards = game.getDealerCards();
     if(dealerCards.length >= 2) {
         const dealerElement = document.getElementById('dealer_cards');
         printCard(dealerElement, dealerCards[1], true); // Reveals the dealer's hidden card
     }
+    */
 
     document.getElementById('card').disabled = true; // Disables the button to draw a card
     document.getElementById('stand').disabled = true; // Disables the button to stand
@@ -41,13 +42,17 @@ function finalizeButtons() {
  * Clears the page to start a new game.
  */
 function clearPage() {
-    document.getElementById('dealer_cards').innerHTML = ''; // Clears dealer's cards display
+    document.getElementById('dealer').innerHTML = 'Loading...'; // Clears dealer's cards display
 
-    document.getElementById('player_cards').innerHTML = ''; // Clears player's cards display
+    document.getElementById('player').innerHTML = 'Loading...'; // Clears player's cards display
 
-    document.getElementById('final-score').innerHTML = ''; // Clears game status display
+    document.getElementById('game_status').innerHTML = ''; // Clears game status display
 
     document.getElementById('debug').innerHTML = ''; // Clears debug information
+
+    document.getElementById('dealer-score').innerHTML = '0'; // Resets dealer's score display
+
+    document.getElementById('player-score').innerHTML = '0'; // Resets player's score display
 }
 
 //TODO: Complete this method.
@@ -69,24 +74,32 @@ function newGame() {
     buttonsInitialization(); // Initializes the game buttons
 }
 
+function updateScores() {
+    const dealerScore = game.getCardsValue(game.getDealerCards());
+    const playerScore = game.getCardsValue(game.getPlayerCards());
+
+    document.getElementById('dealer-score').innerHTML = dealerScore;
+    document.getElementById('player-score').innerHTML = playerScore;
+}
+
 //TODO: Implement this method.
 /**
  * Calculates and displays the final score of the game.
  * @param {Object} state - The current state of the game.
  */
 function finalScore(state) {
-    const scoreElement = document.getElementById('final-score');
+    const statusElement = document.getElementById('game_status');
 
     if(state.playerBust) {
-        scoreElement.innerHTML = 'Player busts! Dealer wins!';
+        statusElement.innerHTML = '💥 Player busts! Dealer wins!';
     } else if(state.dealerBust) {
-        scoreElement.innerHTML = 'Dealer busts! Player wins!';
+        statusElement.innerHTML = '💥 Dealer busts! Player wins!';
     } else if(state.playerWon) {
-        scoreElement.innerHTML = 'Player wins!';
+        statusElement.innerHTML = '🎉 Player wins!';
     } else if(state.dealerWon) {
-        scoreElement.innerHTML = 'Dealer wins!';
+        statusElement.innerHTML = '😢 Dealer wins!';
     } else {
-        scoreElement.innerHTML = 'It\'s a tie!';
+        statusElement.innerHTML = '🤝 It\'s a tie!';
     }
 }
 
@@ -96,27 +109,30 @@ function finalScore(state) {
  * @param {Object} state - The current state of the game.
  */
 function updateDealer(state) {
-    if(state.gameEnded) {
-        const dealerCards = game.getDealerCards();
-        let dealerString = '';
+    const dealerCards = game.getDealerCards();
+    let dealerString = '';
 
-        for(const card of dealerCards) {
-            dealerString += `${card.valor} de ${card.naipe}, `;
-        }
+    for(const card of dealerCards) {
+        dealerString += `${card.valor} de ${card.naipe}, `;
+    }
+
+    if(dealerString.length > 0) {
         dealerString = dealerString.slice(0, -2); // Remove the trailing comma and space
+    }
 
-        if(state.dealorWon) {
-            dealerString += ' - Dealer wins!';
+    if(state.gameEnded) {
+        if(state.dealerWon) {
+            dealerString += '✅ Dealer wins!';
         } else if(state.dealerBust) {
-            dealerString += ' - Dealer busts!';
+            dealerString += '💥 Dealer busts!';
         } else {
-            dealerString += ' - Dealer loses!';
+            dealerString += '❌ Dealer loses!';
         }
-
-        document.getElementById('dealer-cards').innerText = dealerString; // Updates the dealer's cards display
-
+        finalScore(state); // Displays the final score of the game
         finalizeButtons(); // Finalizes the buttons after the game ends
     }
+    document.getElementById('dealer').innerHTML = dealerString; // Updates the dealer's cards display
+    updateScores(); // Updates the scores display
 }
 
 //TODO: Implement this method.
@@ -138,16 +154,18 @@ function updatePlayer(state) {
 
     if(state.gameEnded) {
         if(state.playerWon) {
-            playerString += ' - Player wins!';
+            playerString += '✅ Player wins!';
         } else if(state.playerBust) {
-            playerString += ' - Player busts!';
+            playerString += '💥 Player busts!';
         } else {
-            playerString += ' - Player loses!';
+            playerString += '❌ Player loses!';
         }
 
         finalizeButtons(); // Finalizes the buttons after the game ends
     }
-    document.getElementById('player-cards').innerText = playerString; // Updates the player's cards display
+    document.getElementById('player').innerHTML = playerString; // Updates the player's cards display
+    updateScores(); // Updates the scores display
+    debug(game); // Displays the current state of the game for debugging
 }
 
 //TODO: Implement this method.
@@ -181,10 +199,10 @@ function dealerFinish() {
     game.setDealerTurn(true); // Sets the dealer's turn status to true
 
     while(!state.gameEnded) { 
-        updateDealer(state); // Updates the dealer's state in the game
         dealerNewCard();
         state = game.getGameState();
     }
+    updateDealer(state); // Updates the dealer's state in the game
 
 }
 
@@ -211,6 +229,4 @@ function printCard(element, card, replace = false) {
     }
 }
 
-document.getElementById('card').addEventListener('click', playerNewCard); // Event listener for the "Draw Card" button
-document.getElementById('stand').addEventListener('click', dealerFinish); // Event listener for the "Stand" button
-document.getElementById('new_game').addEventListener('click', newGame); // Event listener for the "New Game" button
+
