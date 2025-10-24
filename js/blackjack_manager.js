@@ -1,6 +1,7 @@
 // Blackjack OOP
 
 let game = null; // Stores the current instance of the game
+let dealerElement = null; // Element to display dealer's cards
 
 /**
  * Function to debug and display the state of the game object.
@@ -25,12 +26,10 @@ function buttonsInitialization() {
 function finalizeButtons() {
     //TODO: Reveal the dealer's hidden card if you hid it like you were supposed to.
 
-    /* const dealerCards = game.getDealerCards();
-    if(dealerCards.length >= 2) {
-        const dealerElement = document.getElementById('dealer_cards');
-        printCard(dealerElement, dealerCards[1], true); // Reveals the dealer's hidden card
+    if(dealerHiddenCard) {
+        $('#dealer-cards .card-back').replaceWith(createCardElement(dealerHiddenCard));
+        dealerHiddenCard = null;
     }
-    */
 
     document.getElementById('card').disabled = true; // Disables the button to draw a card
     document.getElementById('stand').disabled = true; // Disables the button to stand
@@ -53,6 +52,22 @@ function clearPage() {
     document.getElementById('dealer-score').innerHTML = '0'; // Resets dealer's score display
 
     document.getElementById('player-score').innerHTML = '0'; // Resets player's score display
+    
+    dealerHiddenCard = null; // Resets the hidden card variable
+}
+
+function createCardElement(card) {
+    const colorClass = card.isRed() ? 'red' : 'black';
+    return $(`
+        <div class="playing-card ${colorClass}">
+            <div class="card-value">${card.getNome()}</div>
+            <div class="card-suit">${card.getSuitSymbol()}</div>
+        </div>
+    `);
+}
+
+function createCardElement() {
+    return $(`<div class="playing-card card-back">🂠</div>`);
 }
 
 //TODO: Complete this method.
@@ -64,12 +79,17 @@ function newGame() {
     game = new Blackjack(); // Creates a new instance of the Blackjack game
     debug(game); // Displays the current state of the game for debugging
 
+    const state1 = game.dealerMove();
+    $('#dealer-cards').append(createCardElement(game.getDealerCards()[0]));
+
+    game.dealerMove();
+    dealerHiddenCard = game.getDealerCards()[1];
+    $('#dealer-cards').append(createCardElement()); // Appends a card back for the hidden card
+
     //TODO: Add missing code.
-
-    dealerNewCard(); 
-    dealerNewCard(); 
-
     playerNewCard();
+
+    updateScores(); // Updates the scores display
 
     buttonsInitialization(); // Initializes the game buttons
 }
@@ -78,8 +98,8 @@ function updateScores() {
     const dealerScore = game.getCardsValue(game.getDealerCards());
     const playerScore = game.getCardsValue(game.getPlayerCards());
 
-    document.getElementById('dealer-score').innerHTML = dealerScore;
-    document.getElementById('player-score').innerHTML = playerScore;
+    $('#dealer-score').text(dealerScore).hide().fadeIn(300);
+    $('#player-score').text(playerScore).hide().fadeIn(300);
 }
 
 //TODO: Implement this method.
@@ -88,18 +108,22 @@ function updateScores() {
  * @param {Object} state - The current state of the game.
  */
 function finalScore(state) {
-    const statusElement = document.getElementById('game_status');
+    let message = '';
 
     if(state.playerBust) {
-        statusElement.innerHTML = '💥 Player busts! Dealer wins!';
+        message = '💥 Player busts! Dealer wins!';
     } else if(state.dealerBust) {
-        statusElement.innerHTML = '💥 Dealer busts! Player wins!';
+        message = '💥 Dealer busts! Player wins!';
     } else if(state.playerWon) {
-        statusElement.innerHTML = '🎉 Player wins!';
+        message = '🎉 Player wins!';
     } else if(state.dealerWon) {
-        statusElement.innerHTML = '😢 Dealer wins!';
+        message = '😢 Dealer wins!';
     } else {
-        statusElement.innerHTML = '🤝 It\'s a tie!';
+        message = '🤝 It\'s a tie!';
+    }
+
+    if(message) {
+        $('#game_status').html(message).hide().fadeIn(500);
     }
 }
 

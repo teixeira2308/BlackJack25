@@ -4,6 +4,30 @@ class Card {
         this.valor = valor;
         this.naipe = naipe;
     }
+
+    getNome() {
+        const nomes = {
+            1: 'Ás',
+            11: 'Valete',
+            12: 'Dama',
+            13: 'Rei'
+        };
+        return nomes[this.valor] || this.valor.toString();
+    }
+
+    getSuitSymbol() {
+        const symbols = {
+            'Copas': '♥',
+            'Ouros': '♦',
+            'Espadas': '♠',
+            'Paus': '♣'
+        };
+        return symbols[this.naipe] || this.naipe;
+    }
+
+    isRed() {
+        return this.naipe === 'Copas' || this.naipe === 'Ouros';
+    }
 }
 
 /**
@@ -49,9 +73,6 @@ class Blackjack {
 
         for (let naipe of naipes) {
             for (let valor = 1; valor <= 13; valor++) {
-                if (valor === 11) valor = 'Valete';
-                else if (valor === 12) valor = 'Dama';
-                else if (valor === 13) valor = 'Rei';
                 deck.push(new Card(valor, naipe));
             } 
         }

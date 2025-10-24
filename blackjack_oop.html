@@ -30,52 +30,51 @@
 <body>
   <!-- Header section containing the game title -->
   <header class="container">
-    <h1 class="text-center">♠️ Blackjack 25 ♥️</h1> <!-- Main heading for the game -->
+    <h1 class="game-title">♠️ Blackjack 25 ♥️</h1> <!-- Main heading for the game -->
   </header>
 
   <main class="container">
     <!-- Main game section -->
-    <section id="game" class="my-4">
-      <div class="card mb-3">
-        <div class="card-body">
-          <h2 class="card-title">🎩 Dealer <!-- Subheading for the dealer's section -->
-            <span class="badge bg-danger" id="dealer-score">0</span>
-          </h2>
-          <p id="dealer" class="lead">Loading...</p> <!-- Placeholder for displaying dealer's cards -->
-        </div>
-      </div>
+     <div class="blackjack-table">
+      <div class="table-felt"></div>
 
-      <div class = "card mb-3">
-        <div class="card-body">
-          <h2 class="card-title">🎮 Player <!-- Subheading for the player's section -->
-            <span class="badge bg-primary" id="player-score">0</span>
-          </h2>
-          <p id="player" class="lead">Loading...</p> <!-- Placeholder for displaying player's cards -->
+      <section id="dealer-area">
+        <div class="player-label">🎩 Dealer</div>
+        <div class="score-badge">
+          <i class="bi bi-bar-chart-fill"></i> <span id="dealer-score">0</span>
         </div>
-      </div>
+        <div class="card-area" id="dealer-cards"></div>
+      </section>
+
+      <section class="status-message" id="game_status"></section>
+
+      <section id="player-area">
+        <div class="player-label">🎮 Player</div>
+        <div class="score-badge">
+          <i class="bi bi-bar-chart-fill"></i> <span id="player-score">0</span>
+        </div>
+        <div class="card-area" id="player-cards"></div>
+      </section>
+     </div>
+
 
       <!-- Button for the player to draw a new card -->
-      <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-        <button class="btn btn-primary btn-lg" id ="card" onclick="playerNewCard()">
-          <i class="bi bi-plus-circle"></i> Card
-        </button>
-        <button class="btn btn-secondary btn-lg" id="stand" onclick="dealerFinish()">
-          <i class="bi bi-hand-thumbs-up"></i> Stand
-        </button>
-        <button class="btn btn-success btn-lg" id="new_game" onclick="newGame()">
-          <i class="bi bi-arrow-clockwise"></i> New Game
-        </button>
-      </div>
+    <section class="controls">
+      <button class="game-btn btn-primary" id="card" onclick="playerNewCard()">
+        <i class="bi bi-plus-circle"></i> HIT
+      </button>
+      <button class="game-btn btn-warning" id="stand" onclick="dealerFinish()">
+        <i class="bi bi-hand-thumbs-up"></i> STAND
+      </button>
+      <button class="game-btn btn-success" id="new_game" onclick="newGame()">
+        <i class="bi bi-arrow-clockwise"></i> NEW GAME
+      </button>
     </section>
 
-      
-    <!-- Section to display the game's status and messages -->
-    <section id="game_status" class="alert alert-info text-center my-3" role="alert">
-      <!-- This will be populated dynamically during the game -->
-    </section>
+    
 
     <!-- Debugging section for developers to view game state -->
-    <section id="sec_debug">
+    <section class="debug-section" id="sec_debug">
       <div class="accordion" id="debugAccordion">
         <div class="accordion-item">
           <h2 class="accordion-header">
