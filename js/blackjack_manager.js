@@ -101,10 +101,16 @@ function newGame() {
 }
 
 function updateScores() {
-    const dealerScore = game.getCardsValue(game.getDealerCards());
     const playerScore = game.getCardsValue(game.getPlayerCards());
 
-    $('#dealer-score').text(dealerScore).hide().fadeIn(300);
+    if(dealerHiddenCard) {
+        const visibleCards = [game.getDealerCards()[0]];
+        const visibleScore = game.getCardsValue(visibleCards);
+        $('#dealer-score').text(visibleScore + ' + ?').hide().fadeIn(300);
+    } else {
+        const dealerScore = game.getCardsValue(game.getDealerCards());
+        $('#dealer-score').text(dealerScore).hide().fadeIn(300);
+    }
     $('#player-score').text(playerScore).hide().fadeIn(300);
 }
 
