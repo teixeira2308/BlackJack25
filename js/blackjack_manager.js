@@ -198,29 +198,40 @@ function dealerFinish() {
 
     if(dealerHiddenCard) {
         const $cardback = $('#dealer-cards .card-back-img');
-        $cardback.fadeOut(300, function() {
-            $(this).replaceWith(createCardElement(dealerHiddenCard));
-            $('#dealer-cards .card-image-wrapper:last').hide().fadeIn(300);
+        const revealedCard = createCardElement(dealerHiddenCard)
+        ;
+        $cardback.fadeOut(400, function() {
+            $(this).remove();
+            $('#dealer-cards').append(revealedCard.hide().fadeIn(400));
         });
         dealerHiddenCard = null;
+        setTimeout(() => {
+            continueDealer(state);
+        }, 900);
+    } else {
+        continueDealer(state);
     }
+
+
+}
+
+function continueDealer(state) {
     let dealCount = 0;
     const dealInterval = setInterval(() => {
+        state = game.getGameState();
         if(state.gameEnded) {
             clearInterval(dealInterval);
             updateDealer(state);
             return;
         }
         dealerNewCard();
-        state = game.getGameState();
         dealCount++;
 
         if(dealCount > 10) {
             clearInterval(dealInterval);
         }
 
-    }, 1200);
-
+    }, 1000);
 }
 
 $(document).ready(function() {
