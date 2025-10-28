@@ -34,18 +34,17 @@ class Card {
  * Class that represents the Blackjack game.
  */
 class Blackjack {
-    // Constant that defines the maximum points to avoid busting in Blackjack
-    static MAX_POINTS = 21;
-    // Constant that defines the point threshold at which the dealer must stand
-    static DEALER_MAX_TURN_POINTS = 17;
-
     /**
      * Creates an instance of Blackjack and initializes the deck.
      */
-    constructor() {
+    constructor(maxPoints = 21) {
         this.dealerCards = []; // Array to hold the dealer's cards
         this.playerCards = []; // Array to hold the player's cards
         this.dealerTurn = false; // Flag to indicate if it's the dealer's turn to play
+
+        this.maxPoints = maxPoints; // Maximum points to avoid busting
+
+        this.dealerMaxTurnPoints = maxPoints === 25 ? 21 : 17;
 
         // State of the game with information about the outcome
         this.state = {
@@ -150,7 +149,7 @@ class Blackjack {
             }
         }
 
-        while(total > 21 && aces > 0) {
+        while(total > this.maxPoints && aces > 0) {
             total -= 10;
             aces--;
         }
@@ -191,19 +190,19 @@ class Blackjack {
         const playerValue = this.getCardsValue(this.playerCards);
         const dealerValue = this.getCardsValue(this.dealerCards);
 
-        if(playerValue > Blackjack.MAX_POINTS) {
+        if(playerValue > this.maxPoints) {
             this.state.gameEnded = true;
             this.state.playerBusted = true;
             this.state.dealerWon = true;
         }
 
-        if(dealerValue > Blackjack.MAX_POINTS) {
+        if(dealerValue > this.maxPoints) {
             this.state.gameEnded = true;
             this.state.dealerBusted = true;
             this.state.playerWon = true;
         }
 
-        if(this.dealerTurn && dealerValue >= Blackjack.DEALER_MAX_TURN_POINTS && !this.state.gameEnded) {
+        if(this.dealerTurn && dealerValue >= this.dealerMaxTurnPoints && !this.state.gameEnded) {
             if (dealerValue > playerValue) {
                 this.state.dealerWon = true;
             } else if (playerValue > dealerValue) {

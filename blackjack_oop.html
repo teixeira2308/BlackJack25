@@ -30,8 +30,35 @@
 <body>
   <!-- Header section containing the game title -->
   <header class="container">
-    <h1 class="game-title">♠️ Blackjack 25 ♥️</h1> <!-- Main heading for the game -->
+    <h1 class="game-title">♠️ Blackjack <span id="game-mode">21</span> ♥️</h1> <!-- Main heading for the game -->
+    <div class="text-center">
+      <button class="btn btn-sm btn-outline-light" onclick="showModeSelector()">
+        <i class="bi bi-gear"></i> Mudar Modo
+      </button>
+    </div>
   </header>
+
+  <div class="modal fade" id="modeModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-white">
+        <div class="modal-header">
+          <h5 class="modal-title">🎲 Selecione o Modo de Jogo</h5>
+        </div>
+        <div class="modal-body">
+          <div class="d-grid gap-3">
+            <button class="mode-btn btn btn-lg btn-primary" onclick="selectMode(21)">
+              <div class="mode-title">🎯 Blackjack 21</div>
+              <div class="mode-description">Modo Clássico - Rebenta aos 21 pontos</div>
+            </button>
+            <button class="mode-btn btn btn-lg btn-success" onclick="selectMode(25)">
+              <div class="mode-title">🚀 Blackjack 25</div>
+              <div class="mode-description">Modo Extremo - Rebenta aos 25 pontos</div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <main class="container">
     <!-- Main game section -->

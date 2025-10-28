@@ -3,6 +3,27 @@
 let game = null; // Stores the current instance of the game
 let dealerElement = null; // Element to display dealer's cards
 let dealerHiddenCard = null; // Stores the dealer's hidden card
+let gameMode = 21;
+let modeModal = null;
+
+function showModeSelector() {
+    if(!modeModal) {
+        modeModal = new bootstrap.Modal(document.getElementById('modeModal'));
+    }
+    modeModal.show();
+}
+
+function selectMode(mode) {
+    gameMode = mode;
+    Blackjack.MAX_POINTS = mode;
+    $('#game-mode').text(mode);
+
+    if(modeModal) {
+        modeModal.hide();
+    }
+
+    newGame();
+}
 
 /**
  * Function to debug and display the state of the game object.
@@ -82,7 +103,7 @@ function createCardBack() {
  */
 function newGame() {
     clearPage(); // Clears the page for a new game
-    game = new Blackjack(); // Creates a new instance of the Blackjack game
+    game = new Blackjack(gameMode); // Creates a new instance of the Blackjack game
     debug(game); // Displays the current state of the game for debugging
 
     game.dealerMove();
